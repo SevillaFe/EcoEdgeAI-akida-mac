@@ -49,8 +49,8 @@ Our experiments show:
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/neuromorphic-inference-comparison.git
-cd neuromorphic-inference-comparison
+git clone https://github.com/SevillaFe/EcoEdgeAI-akida-mac.git
+cd EcoEdgeAI-akida-mac
 
 # Create virtual environment
 python3 -m venv venv
@@ -64,8 +64,8 @@ pip install -r requirements_mac.txt
 
 ```bash
 # On RPi5
-git clone https://github.com/yourusername/neuromorphic-inference-comparison.git
-cd neuromorphic-inference-comparison
+git clone https://github.com/SevillaFe/EcoEdgeAI-akida-mac.git
+cd EcoEdgeAI-akida-mac
 
 # Create virtual environment
 python3 -m venv venv
@@ -78,7 +78,7 @@ pip install -r requirements_rpi5.txt
 ## 📁 Project Structure
 
 ```
-neuromorphic-inference-comparison/
+EcoEdgeAI-akida-mac/
 │
 ├── README.md                          # This file
 ├── LICENSE                            # MIT License
@@ -292,7 +292,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📧 Contact
 
 
-Project Link: [https://github.com/SevillaFe/neuromorphic-inference-comparison](https://github.com/SevillaFe/EcoEdgeAI-akida-mac)
+Project Link: [https://github.com/SevillaFe/EcoEdgeAI-akida-mac](https://github.com/SevillaFe/EcoEdgeAI-akida-mac)
 
 ## 🌟 Star History
 
