@@ -300,4 +300,4 @@ Project Link: [https://github.com/SevillaFe/EcoEdgeAI-akida-mac](https://github.
 
 ---
 
-**Made with ❤️ for sustainable AI and neuromorphic computing**
+**Made for sustainable AI and neuromorphic computing**
