@@ -270,10 +270,10 @@ If you use this work in your research, please cite:
 
 ```bibtex
 @software{neuromorphic_inference_2025,
-  author = {Your Name},
+  author = {Martínez, Fernando S.},
   title = {Eco-Efficient Inference: Conventional vs Neuromorphic Hardware},
   year = {2025},
-  url = {https://github.com/yourusername/neuromorphic-inference-comparison}
+  url = {https://github.com/SevillaFe/EcoEdgeAI-akida-mac}
 }
 ```
 
@@ -291,13 +291,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - your.email@example.com
 
-Project Link: [https://github.com/yourusername/neuromorphic-inference-comparison](https://github.com/yourusername/neuromorphic-inference-comparison)
+Project Link: [https://github.com/SevillaFe/neuromorphic-inference-comparison](https://github.com/SevillaFe/EcoEdgeAI-akida-mac)
 
 ## 🌟 Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/neuromorphic-inference-comparison&type=Date)](https://star-history.com/#yourusername/neuromorphic-inference-comparison&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=SevillaFe/EcoEdgeAI-akida-mac&type=Date)](https://star-history.com/#SevillaFe/EcoEdgeAI-akida-mac&Date)
 
 ---
 
