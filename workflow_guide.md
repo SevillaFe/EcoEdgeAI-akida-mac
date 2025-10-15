@@ -30,7 +30,7 @@ Train all three models (PilotNet, LaksNet, MiniNet):
 ```bash
 # Train PilotNet
 python train_steering_models_tf.py \
-  --data_dir /Users/fernando/Documents/Doctorado/Udacity_Datset/Original_Images \
+  --data_dir ~/Udacity_Datset/Original_Images \
   --output_dir ./output \
   --model_name pilotnet \
   --epochs 20 \
@@ -39,7 +39,7 @@ python train_steering_models_tf.py \
 
 # Train LaksNet
 python train_steering_models_tf.py \
-  --data_dir /Users/fernando/Documents/Doctorado/Udacity_Datset/Original_Images \
+  --data_dir ~/Udacity_Datset/Original_Images \
   --output_dir ./output \
   --model_name laksnet \
   --epochs 20 \
@@ -48,7 +48,7 @@ python train_steering_models_tf.py \
 
 # Train MiniNet
 python train_steering_models_tf.py \
-  --data_dir /Users/fernando/Documents/Doctorado/Udacity_Datset/Original_Images \
+  --data_dir ~/Udacity_Datset/Original_Images \
   --output_dir ./output \
   --model_name mininet \
   --epochs 20 \
@@ -61,8 +61,8 @@ python train_steering_models_tf.py \
 - `float_history.csv` - Training metrics
 - `training_emissions.csv` - Training energy consumption
 - `{model}_int8.tflite` - Quantized INT8 model
-- `{model}_qat_int8.tflite` - QAT fine-tuned INT8 model (optional)
-- `{model}_qat_history.csv` - QAT metrics
+- `{model}_finetuned_qat_int8.tflite` - QAT fine-tuned INT8 model (optional)
+- `{model}_finetuned_qat_history.csv` - QAT metrics
 - `qat_training_emissions.csv` - QAT energy consumption
 
 ---
@@ -76,21 +76,21 @@ Benchmark float vs quantized models with CodeCarbon:
 python benchmark_inference.py \
   --float_model ./output/pilotnet/float_best.keras \
   --tflite_model ./output/pilotnet/pilotnet_int8.tflite \
-  --data_dir /Users/fernando/Documents/Doctorado/Udacity_Datset/Original_Images \
+  --data_dir ~/Udacity_Datset/Original_Images \
   --num_samples 1000
 
 # Benchmark LaksNet
 python benchmark_inference.py \
   --float_model ./output/laksnet/float_best.keras \
   --tflite_model ./output/laksnet/laksnet_int8.tflite \
-  --data_dir /Users/fernando/Documents/Doctorado/Udacity_Datset/Original_Images \
+  --data_dir ~/Udacity_Datset/Original_Images \
   --num_samples 1000
 
 # Benchmark MiniNet
 python benchmark_inference.py \
   --float_model ./output/mininet/float_best.keras \
   --tflite_model ./output/mininet/mininet_int8.tflite \
-  --data_dir /Users/fernando/Documents/Doctorado/Udacity_Datset/Original_Images \
+  --data_dir ~/Udacity_Datset/Original_Images \
   --num_samples 1000
 ```
 
@@ -121,7 +121,7 @@ scp ./output/laksnet/mac_inference_comparison.json pi@raspberrypi:~/models/
 scp ./output/mininet/mac_inference_comparison.json pi@raspberrypi:~/models/
 
 # Transfer dataset (if not already on RPi5)
-# rsync -avz --progress /Users/fernando/Documents/Doctorado/Udacity_Datset/Original_Images/ \
+# rsync -avz --progress ~/Udacity_Datset/Original_Images/ \
 #   pi@raspberrypi:~/data/Original_Images/
 ```
 
@@ -337,7 +337,7 @@ for model in ['pilotnet', 'laksnet', 'mininet']:
 
 ## 🎓 Summary
 
-This workflow allows you to:
+This workflow allows to:
 
 1. ✅ Train models on Mac with energy tracking
 2. ✅ Quantize models (TFLite INT8) on Mac
@@ -352,4 +352,3 @@ This workflow allows you to:
 - What is the latency difference?
 - Which architecture (PilotNet, LaksNet, MiniNet) is most efficient?
 
-Good luck with your research! 🚀🧠
