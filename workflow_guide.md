@@ -6,12 +6,12 @@ This guide walks you through the complete process of comparing conventional hard
 
 ### Mac (M-series):
 ```bash
-pip install tensorflow tensorflow-model-optimization pandas numpy pillow codecarbon
+pip install requirements_mac.txt
 ```
 
 ### RPi5 (Linux):
 ```bash
-pip install tensorflow akida cnn2snn pandas numpy pillow
+pip install requirements_rpi5.txt
 ```
 
 ### Hardware:
