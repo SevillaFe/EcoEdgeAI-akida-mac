@@ -367,9 +367,9 @@ If you use this work in your research, please cite:
 @article{sevilla2025sustainable,
   title={Sustainable Neuromorphic Edge Intelligence for Autonomous Driving: A Comparative Eco-Efficiency Evaluation},
   author={Sevilla Mart{\'i}nez, Fernando and Casas-Roma, Jordi and Subirats, Laia and Parada, Ra{\'u}l},
-  journal={[Journal Name]},
+  journal={[TBD]},
   year={2025},
-  publisher={[Publisher]}
+  publisher={[TBD]}
 }
 ```
 
@@ -389,8 +389,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Fernando Sevilla Martínez**
 - Email: fsevillama@uoc.edu
-- LinkedIn: [Your LinkedIn](YOUR_LINKEDIN)
-- ResearchGate: [Your Profile](YOUR_RESEARCHGATE)
 
 **Project Link:** [https://github.com/SevillaFe/EcoEdgeAI-akida-mac](https://github.com/SevillaFe/EcoEdgeAI-akida-mac)
 
