@@ -22,8 +22,8 @@ IMPORTANT:
 
 USAGE:
 ======
---model_path /home/fernando/Documents/Doctorado/pilotnet/pilotnet_float32_best.h5 \
---output_dir /home/fernando/Documents/Doctorado/akida_models/pilotnet_akida \
+--model_path ./pilotnet/pilotnet_float32_best.h5 \
+--output_dir ./akida_models/pilotnet_akida \
 
 # Without QAT (Post-Training Quantization only)
 python quantize_and_convert_rpi5.py \
@@ -33,12 +33,12 @@ python quantize_and_convert_rpi5.py \
 
 # With QAT for 4-bit model
 python quantize_and_convert_rpi5.py \
-    --model_path -model_path /home/fernando/Documents/Doctorado/pilotnet/pilotnet_float32_best.h5 \
-    --output_dir --output_dir /home/fernando/Documents/Doctorado/akida_models/pilotnet_akida \
+    --model_path -model_path ./pilotnet/pilotnet_float32_best.h5 \
+    --output_dir --output_dir ./akida_models/pilotnet_akida \
     --bits 4 \
     --qat_epochs 5 \
     --qat_lr 1e-6 \
-    --data_dir /home/fernando/Documents/Doctorado/Original_Images
+    --data_dir ./Original_Images
 
 ARGUMENTS:
 ==========
