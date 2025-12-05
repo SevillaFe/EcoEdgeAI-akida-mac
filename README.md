@@ -30,7 +30,6 @@ Parada]
 - [Reproducibility](#reproducibility)
 - [Citation](#citation)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 ---
 
