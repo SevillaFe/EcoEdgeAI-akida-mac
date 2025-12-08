@@ -68,7 +68,7 @@ try:
     import pandas as pd
     import cv2
 except ImportError as e:
-    print(f"❌ Import error: {e}")
+    print(f" Import error: {e}")
     print("\nThis script requires cnn2snn and akida packages.")
     print("Make sure you're running on RPi5 with:")
     print("  pip install cnn2snn akida")
@@ -84,7 +84,7 @@ def detect_akida_device():
     devices = akida.devices()
 
     if len(devices) == 0:
-        print("\n❌ NO AKIDA DEVICE DETECTED!")
+        print("\n NO AKIDA DEVICE DETECTED!")
         print("This script requires Akida hardware.")
         sys.exit(1)
 
@@ -98,14 +98,14 @@ def detect_akida_device():
 
         # Verify it's Akida 1.0
         if version_str.startswith('BC'):
-            print(f"\n✓ Detected: Akida 1.0 (BC hardware)")
+            print(f"\n Detected: Akida 1.0 (BC hardware)")
             akida_version = AkidaVersion.v1
         else:
-            print(f"\n⚠️  Warning: Detected Akida 2.0")
+            print(f"\n  Warning: Detected Akida 2.0")
             print("This script is optimized for Akida 1.0")
             akida_version = AkidaVersion.v2
     except AttributeError:
-        print("\n⚠️  Could not determine version, assuming Akida 1.0")
+        print("\n  Could not determine version, assuming Akida 1.0")
         akida_version = AkidaVersion.v1
 
     return device, akida_version
@@ -237,7 +237,7 @@ def detect_akida_device():
     devices = akida.devices()
 
     if len(devices) == 0:
-        print("\n❌ NO AKIDA DEVICE DETECTED!")
+        print("\n NO AKIDA DEVICE DETECTED!")
         print("This script requires Akida hardware.")
         sys.exit(1)
 
@@ -254,11 +254,11 @@ def detect_akida_device():
             print(f"\n✓ Detected: Akida 1.0 (BC hardware)")
             akida_version = AkidaVersion.v1
         else:
-            print(f"\n⚠️  Warning: Detected Akida 2.0")
+            print(f"\n  Warning: Detected Akida 2.0")
             print("This script is optimized for Akida 1.0")
             akida_version = AkidaVersion.v2
     except AttributeError:
-        print("\n⚠️  Could not determine version, assuming Akida 1.0")
+        print("\n  Could not determine version, assuming Akida 1.0")
         akida_version = AkidaVersion.v1
 
     return device, akida_version
@@ -274,7 +274,7 @@ def load_float32_model(model_path):
     try:
         model = keras_models.load_model(str(model_path), compile=False)
     except Exception as e:
-        print(f"❌ Failed to load model: {e}")
+        print(f" Failed to load model: {e}")
         sys.exit(1)
 
     print(f"✓ Model loaded successfully")
@@ -449,7 +449,7 @@ def quantize_model_cnn2snn(model, bits, output_dir, model_name,
         print(f"✓ Calibration data shape: {calib_images.shape}")
     else:
         calib_images = None
-        print("⚠️  No calibration data provided - using default quantization")
+        print("  No calibration data provided - using default quantization")
 
     try:
         # NOTE: cnn2snn.quantize() API is different from quantizeml
@@ -462,7 +462,7 @@ def quantize_model_cnn2snn(model, bits, output_dir, model_name,
             activ_quantization=bits
         )
 
-        print(f"✓ Quantization successful!")
+        print(f" Quantization successful!")
 
         # If calibration data was provided, we can do a quick evaluation
         if calib_images is not None:
@@ -470,10 +470,10 @@ def quantize_model_cnn2snn(model, bits, output_dir, model_name,
             try:
                 # Quick check on a few samples
                 sample_preds = quantized.predict(calib_images[:10], verbose=0)
-                print(f"✓ Quantized model inference working")
+                print(f" Quantized model inference working")
                 print(f"  Sample predictions range: [{sample_preds.min():.3f}, {sample_preds.max():.3f}]")
             except Exception as e:
-                print(f"⚠️  Calibration validation failed: {e}")
+                print(f"  Calibration validation failed: {e}")
 
         # Save quantized model
         output_path = output_dir / f"{model_name}_q{bits}_cnn2snn.h5"
@@ -483,7 +483,7 @@ def quantize_model_cnn2snn(model, bits, output_dir, model_name,
         return quantized, output_path
 
     except Exception as e:
-        print(f"\n❌ Quantization failed: {e}")
+        print(f"\n Quantization failed: {e}")
         print("\nPossible issues:")
         print("  - Model architecture incompatible with Akida 1.0")
         print("  - Unsupported layers (check Conv2D kernel sizes)")
@@ -533,12 +533,12 @@ def convert_to_akida(quantized_model, device, akida_version, output_dir, model_n
             print(f"  [{i}] {layer_info}")
             # Check for CPU emulation indicators
             if 'cpu' in layer_info.lower() or 'emulation' in layer_info.lower():
-                print(f"      ⚠️  WARNING: This layer may run on CPU emulation!")
+                print(f"        WARNING: This layer may run on CPU emulation!")
 
         # Save
         fbz_path = output_dir / f"{model_name}_q{bits}_akida.fbz"
         akida_model.save(str(fbz_path))
-        print(f"\n✓ Saved: {fbz_path}")
+        print(f"\n Saved: {fbz_path}")
 
         # Verify hardware mapping
         print(f"\n" + "=" * 70)
@@ -547,13 +547,13 @@ def convert_to_akida(quantized_model, device, akida_version, output_dir, model_n
 
         try:
             akida_model.map(device)
-            print("\n✓✓✓ SUCCESS! ✓✓✓")
+            print("\n SUCCESS! ")
             print("Model maps to Akida hardware!")
             print("Ready for inference on NPU.")
             return fbz_path, True
 
         except RuntimeError as e:
-            print(f"\n❌ MAPPING FAILED: {e}")
+            print(f"\n MAPPING FAILED: {e}")
             print("\nThe model converted but cannot map to hardware.")
             print("This usually means:")
             print("  - IP version mismatch")
@@ -562,7 +562,7 @@ def convert_to_akida(quantized_model, device, akida_version, output_dir, model_n
             return fbz_path, False
 
     except Exception as e:
-        print(f"\n❌ Conversion failed: {e}")
+        print(f"\n Conversion failed: {e}")
         print("\nCommon issues:")
         print("  - Unsupported layer types")
         print("  - Incompatible layer configurations")
@@ -593,13 +593,13 @@ def test_quantized_model(model, test_samples=100):
         # Run inference
         predictions = model.predict(X_test, verbose=0)
 
-        print(f"✓ Model can process {test_samples} samples")
+        print(f"  Model can process {test_samples} samples")
         print(f"  Output shape: {predictions.shape}")
         print(f"  Output range: [{predictions.min():.3f}, {predictions.max():.3f}]")
 
         return True
     except Exception as e:
-        print(f"❌ Smoke test failed: {e}")
+        print(f" Smoke test failed: {e}")
         return False
 
 
@@ -637,17 +637,17 @@ def main():
     # Validate inputs
     model_path = Path(args.model_path)
     if not model_path.exists():
-        print(f"❌ Model not found: {model_path}")
+        print(f" Model not found: {model_path}")
         sys.exit(1)
 
     # Check QAT and calibration requirements
     needs_data = args.qat_epochs > 0 or args.use_calibration
     if needs_data:
         if args.data_dir is None:
-            print(f"❌ --data_dir is required when QAT or calibration is enabled")
+            print(f" --data_dir is required when QAT or calibration is enabled")
             sys.exit(1)
         if not Path(args.data_dir).exists():
-            print(f"❌ Dataset directory not found: {args.data_dir}")
+            print(f" Dataset directory not found: {args.data_dir}")
             sys.exit(1)
 
     output_dir = Path(args.output_dir) if args.output_dir else model_path.parent
@@ -768,14 +768,14 @@ def main():
 
     for bits in args.bits:
         result = results[bits]
-        status_ptq = "✓" if result['mapping_success_ptq'] else "❌"
+        status_ptq = "Success" if result['mapping_success_ptq'] else "Failed"
 
         print(f"\n{bits}-bit quantization:")
         print(f"  PTQ (Keras):       {result['quantized_path'].name}")
         print(f"  PTQ (Akida FBZ):   {result['akida_path_ptq'].name} {status_ptq}")
 
         if result['qat_path']:
-            status_qat = "✓" if result['mapping_success_qat'] else "❌"
+            status_qat = "Success" if result['mapping_success_qat'] else "Failed"
             print(f"  QAT (Keras):       {result['qat_path'].name}")
             print(f"  QAT (Akida FBZ):   {result['akida_path_qat'].name} {status_qat}")
 
@@ -803,7 +803,7 @@ def main():
     # Warning for failed mappings
     failed = [bits for bits in args.bits if not results[bits]['mapping_success_ptq']]
     if failed:
-        print(f"\n⚠️  WARNING: {len(failed)} PTQ model(s) failed hardware mapping:")
+        print(f"\n  WARNING: {len(failed)} PTQ model(s) failed hardware mapping:")
         for bits in failed:
             print(f"   - {bits}-bit model will run in CPU emulation (VERY SLOW)")
         print("\nCheck model architecture for Akida 1.0 compatibility:")
