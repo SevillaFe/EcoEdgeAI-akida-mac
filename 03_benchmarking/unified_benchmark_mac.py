@@ -13,9 +13,9 @@ CRITICAL DIFFERENCES FROM ORIGINAL:
 
 Usage:
 python unified_benchmark_mac.py \
-  --model /Users/fernando/Documents/Doctorado/Udacity_Dataset/paper_5/output/pilotnet/pilotnet_float32.h5 \
-  --data_dir /Users/fernando/Documents/Doctorado/Udacity_Dataset/Original_Images \
-  --output_dir /Users/fernando/Documents/Doctorado/Udacity_Dataset/paper_5/output/benchmark_results \
+  --model ./Udacity_Dataset/paper_5/output/pilotnet/pilotnet_float32.h5 \
+  --data_dir ./Doctorado/Udacity_Dataset/Original_Images \
+  --output_dir ./Udacity_Dataset/paper_5/output/benchmark_results \
   --num_samples 1000 \
   --measure_idle \
   --idle_duration 5
@@ -37,7 +37,7 @@ try:
     from codecarbon import EmissionsTracker
     CODECARBON_AVAILABLE = True
 except ImportError:
-    print("⚠️ CodeCarbon not available - install with: pip install codecarbon")
+    print("CodeCarbon not available - install with: pip install codecarbon")
     CODECARBON_AVAILABLE = False
 
 
@@ -219,7 +219,7 @@ def measure_idle_power(duration_seconds=5):
         }
     
     except Exception as e:
-        print(f"⚠️ Could not measure idle power: {e}")
+        print(f"Could not measure idle power: {e}")
         return {'idle_energy_kwh': 0.0, 'idle_power_w': 0.0}
 
 
@@ -279,9 +279,9 @@ def benchmark_inference_unified(model, images, steerings, warmup_runs=10,
                 log_level="error"
             )
             tracker.start()
-            print("\n🔋 CodeCarbon tracker started")
+            print("\nCodeCarbon tracker started")
         except Exception as e:
-            print(f"⚠️ CodeCarbon error: {e}")
+            print(f"CodeCarbon error: {e}")
             tracker = None
     
     # Benchmark with batch_size=1 (matching Akida)
@@ -320,9 +320,9 @@ def benchmark_inference_unified(model, images, steerings, warmup_runs=10,
                 ed = getattr(tracker, "_emissions_data", None)
                 if ed:
                     total_energy_kwh = float(getattr(ed, "energy_consumed", 0.0))
-            print(f"🔋 CodeCarbon tracker stopped")
+            print(f"CodeCarbon tracker stopped")
         except Exception as e:
-            print(f"⚠️ Error stopping tracker: {e}")
+            print(f"Error stopping tracker: {e}")
     
     # Subtract idle power consumption
     # CodeCarbon measures total system, we want only inference overhead
