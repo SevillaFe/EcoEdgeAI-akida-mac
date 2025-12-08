@@ -3,17 +3,17 @@ from pathlib import Path
 import csv
 from datetime import datetime
 
-# Directorio de resultados
-results_dir = Path("/Users/fernando/Documents/Doctorado/Udacity_Dataset/paper_5/output/benchmark_results")
+# Results folder
+results_dir = Path("./output/benchmark_results")
 results_dir.mkdir(parents=True, exist_ok=True)
 
 models = ['pilotnet', 'laksnet', 'mininet']
 
-# Archivo de salida para texto
+# Output files for text
 output_txt = results_dir / "mac_statistics_summary.txt"
 output_csv = results_dir / "mac_statistics_summary.csv"
 
-# Preparar datos
+# Data preparation
 all_stats = []
 
 print("="*80)
@@ -32,7 +32,7 @@ with open(output_txt, 'w') as f_txt:
     
     for model in models:
         #json_file = Path(f"./{model}_float32_unified_benchmark_results.json")
-        json_file = Path(f"/Users/fernando/Documents/Doctorado/Udacity_Dataset/paper_5/output/benchmark_results/{model}_float32_unified_benchmark_results.json")
+        json_file = Path(f"./output/benchmark_results/{model}_float32_unified_benchmark_results.json")
         
         if json_file.exists():
             with open(json_file) as f:
@@ -46,7 +46,7 @@ with open(output_txt, 'w') as f_txt:
             num_samples = data.get('num_samples', None)
             inference_co2_kg = data.get('codecarbon_total_co2_kg', None)
             
-            # Calcular CO2 por muestra (kg y g)
+            # CO2 calculation per sample (kg y g)
             co2_kg_per_sample = None
             co2_g_per_sample = None
 
@@ -54,12 +54,12 @@ with open(output_txt, 'w') as f_txt:
                 co2_kg_per_sample = inference_co2_kg / num_samples
                 co2_g_per_sample = co2_kg_per_sample * 1000
             
-            # Imprimir en consola
+            # Show in terminal
             line = f"{model.capitalize():<15} {mean:<12.4f} {std:<12.4f} {min_lat:<12.4f} {max_lat:<12.4f} {cv:<10.2f}"
             print(line)
             f_txt.write(line + "\n")
             
-            # Detalles adicionales
+            # Additional details
             details = [
                 f"  → MSE: {data['mse']:.6f}, MAE: {data['mae']:.6f}",
                 f"  → Energy: {data.get('energy_per_sample_mwh', 'N/A')} mWh, Power: {data.get('avg_inference_power_w', 'N/A')} W",
@@ -70,7 +70,7 @@ with open(output_txt, 'w') as f_txt:
                 print(detail)
                 f_txt.write(detail + "\n")
             
-            # Guardar para CSV
+            # Store for CSV use
             all_stats.append({
                 'architecture': model.capitalize(),
                 'platform': 'Mac M1 Pro',
@@ -103,7 +103,7 @@ with open(output_txt, 'w') as f_txt:
 
 print("="*80)
 
-# Guardar CSV
+# Store CSV file
 with open(output_csv, 'w', newline='') as csvfile:
     if all_stats:
         fieldnames = all_stats[0].keys()
@@ -111,6 +111,6 @@ with open(output_csv, 'w', newline='') as csvfile:
         writer.writeheader()
         writer.writerows(all_stats)
 
-print(f"\n✓ Resultados guardados:")
+print(f"\n  Resultados guardados:")
 print(f"  - Texto: {output_txt}")
 print(f"  - CSV:   {output_csv}")
