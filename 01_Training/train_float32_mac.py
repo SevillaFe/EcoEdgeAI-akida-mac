@@ -221,12 +221,12 @@ class EnergyTrackerCallback(Callback):
             log_level='warning'
         )
         self.tracker.start()
-        print(f"\n🔋 Energy tracking started: {output_file_path}")
+        print(f"\n Energy tracking started: {output_file_path}")
         
     def on_train_end(self, logs=None):
         if self.tracker:
             emissions = self.tracker.stop()
-            print(f"\n🔋 Energy tracking stopped")
+            print(f"\n Energy tracking stopped")
             print(f"   Total emissions: {emissions:.6f} kgCO2eq")
 
 
@@ -623,7 +623,7 @@ def train_model(model_name, data_dir, base_output_dir, result_dir,
     
     # Summary
     print("\n" + "="*70)
-    print(f"✅ {model_name.upper()} TRAINING COMPLETE")
+    print(f" {model_name.upper()} TRAINING COMPLETE")
     print("="*70)
     print(f"\nModel saved: {final_path}")
     print(f"\nValidation Metrics:")
@@ -652,36 +652,36 @@ def verify_akida_v1_compatibility(model):
                 kernel = layer.kernel_size
                 if kernel not in [(3, 3), (1, 1)]:
                     issues.append(
-                        f"❌ {layer.name}: Conv2D with stride=2 has kernel={kernel} "
+                        f" {layer.name}: Conv2D with stride=2 has kernel={kernel} "
                         f"(must be 3x3 or 1x1 for Akida 1.0)"
                     )
         
         # Check for unsupported layers
         if isinstance(layer, layers.GlobalAveragePooling2D):
             issues.append(
-                f"❌ {layer.name}: GlobalAveragePooling2D not supported by Akida 1.0"
+                f" {layer.name}: GlobalAveragePooling2D not supported by Akida 1.0"
             )
         
         if isinstance(layer, layers.Lambda):
             issues.append(
-                f"❌ {layer.name}: Lambda layers not supported by Akida 1.0"
+                f" {layer.name}: Lambda layers not supported by Akida 1.0"
             )
         
         if isinstance(layer, layers.LayerNormalization):
             issues.append(
-                f"❌ {layer.name}: LayerNormalization not supported by Akida 1.0"
+                f" {layer.name}: LayerNormalization not supported by Akida 1.0"
             )
     
     if issues:
-        print("\n⚠️  COMPATIBILITY ISSUES DETECTED:")
+        print("\n  COMPATIBILITY ISSUES DETECTED:")
         for issue in issues:
             print(f"  {issue}")
-        print("\n❌ Model is NOT compatible with Akida 1.0!")
+        print("\n Model is NOT compatible with Akida 1.0!")
         print("Please fix architecture before training.")
         return False
     else:
-        print("✓ Architecture is compatible with Akida 1.0")
-        print("✓ Ready for quantization and conversion on RPi5")
+        print(" Architecture is compatible with Akida 1.0")
+        print(" Ready for quantization and conversion on RPi5")
         return True
 
 
@@ -743,7 +743,7 @@ def main():
     print(f"  Batch size: {args.batch_size}")
     print(f"  Epochs: {args.epochs}")
     print(f"  Learning rate: {args.learning_rate}")
-    print("\n🔋 CodeCarbon energy tracking enabled")
+    print("\n CodeCarbon energy tracking enabled")
     print("="*70)
     
     # Train all models
