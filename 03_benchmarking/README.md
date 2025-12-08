@@ -23,6 +23,12 @@ python unified_benchmark_akida.py \
 
 ### TC66 Power Meter
 
+Credit: Thank you for your work, it was an inspiration.
+[TheHWcave](https://github.com/TheHWcave/TC66.git)
+
+I used also the info here: https://sigrok.org/wiki/RDTech_TC66C for coding the protocol and decrypting the data
+
+
 **Connection:**
 ```
 Power Supply (5V/5A) → TC66 → RPi5 USB-C
