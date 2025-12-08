@@ -3,17 +3,17 @@ from pathlib import Path
 import csv
 from datetime import datetime
 
-# Directorio de resultados
-results_dir = Path("/Users/fernando/Documents/Doctorado/Udacity_Dataset/paper_5/output/benchmark_results_Akida")
+# Results folder
+results_dir = Path("./output/benchmark_results_Akida")
 results_dir.mkdir(parents=True, exist_ok=True)
 
 models = ['pilotnet', 'laksnet', 'mininet']
 
-# Archivos de salida
+# Outputs files
 output_txt = results_dir / "akida_statistics_summary.txt"
 output_csv = results_dir / "akida_statistics_summary.csv"
 
-# Preparar datos
+# Data preparation
 all_stats = []
 
 print("="*80)
@@ -33,7 +33,7 @@ with open(output_txt, 'w') as f_txt:
     for model in models:
         # Probar varias rutas posibles
         json_paths = [
-            Path(f"/Users/fernando/Documents/Doctorado/Udacity_Dataset/paper_5/output/benchmark_results_Akida/{model}/{model}_best_q4_unified_benchmark_results.json")
+            Path(f"./output/benchmark_results_Akida/{model}/{model}_best_q4_unified_benchmark_results.json")
             ]
         
         json_file = None
@@ -52,12 +52,12 @@ with open(output_txt, 'w') as f_txt:
             max_lat = data['max_latency_ms']
             cv = (std / mean * 100) if mean > 0 else 0
             
-            # Imprimir en consola
+            # Show in Terminal
             line = f"{model.capitalize():<15} {mean:<12.4f} {std:<12.4f} {min_lat:<12.4f} {max_lat:<12.4f} {cv:<10.2f}"
             print(line)
             f_txt.write(line + "\n")
             
-            # Detalles adicionales
+            # Additional Details
             details = [
                 f"  → MSE: {data['mse']:.6f}, MAE: {data['mae']:.6f}",
                 f"  → Energy: {data.get('energy_per_sample_mwh', 'N/A')} mWh, Power: {data.get('avg_inference_power_w', 'N/A')} W",
@@ -103,7 +103,7 @@ with open(output_txt, 'w') as f_txt:
 
 print("="*80)
 
-# Guardar CSV
+# Save CSV
 with open(output_csv, 'w', newline='') as csvfile:
     if all_stats:
         fieldnames = all_stats[0].keys()
@@ -111,6 +111,6 @@ with open(output_csv, 'w', newline='') as csvfile:
         writer.writeheader()
         writer.writerows(all_stats)
 
-print(f"\n✓ Resultados guardados:")
+print(f"\n Results saved:")
 print(f"  - Texto: {output_txt}")
 print(f"  - CSV:   {output_csv}")
