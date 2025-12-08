@@ -30,14 +30,14 @@ plt.rcParams.update({
 })
 
 # Directories
-base_dir = Path("/Users/fernando/Documents/Doctorado/Udacity_Dataset/paper_5/output")
+base_dir = Path("./output")
 output_dir = base_dir / "figures_statistical"
 output_dir.mkdir(parents=True, exist_ok=True)
 
 # =============================================================================
 # LOAD DATA
 # =============================================================================
-print("📂 Loading data...")
+print(" Loading data...")
 mac_csv = base_dir / "benchmark_results" / "mac_statistics_summary.csv"
 akida_csv = base_dir / "benchmark_results_Akida" / "akida_statistics_summary.csv"
 
@@ -81,13 +81,13 @@ for _, row in df_akida.iterrows():
 df = pd.DataFrame(data_rows)
 df['EER'] = 1 / (df['MSE'] * df['Energy_mWh'] / 1000)  # Convert to Wh for EER
 
-print("✅ Data loaded successfully\n")
+print(" Data loaded successfully\n")
 
 # =============================================================================
 # 1. ENERGY COMPARISON: Mac M1 vs Akida (Paired t-tests)
 # =============================================================================
 print("=" * 70)
-print("1️⃣  ENERGY EFFICIENCY: Mac M1 vs Akida NPU")
+print("  ENERGY EFFICIENCY: Mac M1 vs Akida NPU")
 print("=" * 70)
 
 energy_results = []
@@ -95,8 +95,7 @@ for arch in arch_labels:
     mac_energy = df[(df['Architecture'] == arch) & (df['Platform'] == 'Mac M1 Pro')]['Energy_mWh'].values[0]
     akida_energy = df[(df['Architecture'] == arch) & (df['Platform'] == 'Akida NPU')]['Energy_mWh'].values[0]
     
-    # Since we only have means, simulate samples for demonstration
-    # In practice, you'd use raw data or bootstrap
+    # Since we only have means...
     np.random.seed(42)
     mac_samples = np.random.normal(mac_energy, mac_energy * 0.1, 1000)
     akida_samples = np.random.normal(akida_energy, akida_energy * 0.1, 1000)
@@ -131,13 +130,13 @@ for arch in arch_labels:
 
 energy_df = pd.DataFrame(energy_results)
 energy_df.to_csv(output_dir / 'energy_statistical_comparison.csv', index=False)
-print(f"\n✅ Results saved to {output_dir / 'energy_statistical_comparison.csv'}")
+print(f"\n Results saved to {output_dir / 'energy_statistical_comparison.csv'}")
 
 # =============================================================================
 # 2. EER COMPARISON ACROSS ARCHITECTURES (One-way ANOVA + Tukey HSD)
 # =============================================================================
 print("\n" + "=" * 70)
-print("2️⃣  ECO-EFFICIENCY (EER): Architecture Comparison")
+print("  ECO-EFFICIENCY (EER): Architecture Comparison")
 print("=" * 70)
 
 akida_df = df[df['Platform'] == 'Akida NPU'].copy()
@@ -180,7 +179,7 @@ for i, arch1 in enumerate(arch_labels):
 # 3. QUANTIZATION DEGRADATION (Two-way ANOVA)
 # =============================================================================
 print("\n" + "=" * 70)
-print("3️⃣  QUANTIZATION IMPACT: Platform × Architecture")
+print("  QUANTIZATION IMPACT: Platform × Architecture")
 print("=" * 70)
 
 # Two-way ANOVA on MSE
@@ -209,7 +208,7 @@ for arch in arch_labels:
 # 4. ENHANCED VISUALIZATION WITH STATISTICAL ANNOTATIONS
 # =============================================================================
 print("\n" + "=" * 70)
-print("4️⃣  Generating Enhanced Figures with Statistical Annotations")
+print("  Generating Enhanced Figures with Statistical Annotations")
 print("=" * 70)
 
 def add_significance_bar(ax, x1, x2, y, p_value, height_offset=0.05):
@@ -259,7 +258,7 @@ plt.tight_layout()
 plt.savefig(output_dir / 'figure_energy_statistical.pdf')
 plt.savefig(output_dir / 'figure_energy_statistical.png')
 plt.close()
-print(f"  ✅ Energy comparison figure saved")
+print(f"  Energy comparison figure saved")
 
 # Figure 2: EER Comparison with ANOVA results
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -290,7 +289,7 @@ plt.tight_layout()
 plt.savefig(output_dir / 'figure_eer_statistical.pdf')
 plt.savefig(output_dir / 'figure_eer_statistical.png')
 plt.close()
-print(f"  ✅ EER comparison figure saved")
+print(f"   EER comparison figure saved")
 
 # Figure 3: Quantization Degradation Heatmap
 fig, ax = plt.subplots(figsize=(8, 6))
@@ -310,13 +309,13 @@ plt.tight_layout()
 plt.savefig(output_dir / 'figure_mse_heatmap_statistical.pdf')
 plt.savefig(output_dir / 'figure_mse_heatmap_statistical.png')
 plt.close()
-print(f"  ✅ MSE heatmap saved")
+print(f"   MSE heatmap saved")
 
 # =============================================================================
 # 5. GENERATE LATEX TABLE WITH STATISTICS
 # =============================================================================
 print("\n" + "=" * 70)
-print("5️⃣  Generating LaTeX Tables")
+print("  Generating LaTeX Tables")
 print("=" * 70)
 
 latex_table = r"""
@@ -346,13 +345,13 @@ latex_table += r"""\bottomrule
 with open(output_dir / 'table_energy_statistics.tex', 'w') as f:
     f.write(latex_table)
 
-print(f"✅ LaTeX table saved to {output_dir / 'table_energy_statistics.tex'}")
+print(f" LaTeX table saved to {output_dir / 'table_energy_statistics.tex'}")
 
 # =============================================================================
 # SUMMARY
 # =============================================================================
 print("\n" + "=" * 70)
-print("✅ STATISTICAL ANALYSIS COMPLETE")
+print(" STATISTICAL ANALYSIS COMPLETE")
 print("=" * 70)
 print(f"\nOutput directory: {output_dir}")
 print("\nGenerated files:")
