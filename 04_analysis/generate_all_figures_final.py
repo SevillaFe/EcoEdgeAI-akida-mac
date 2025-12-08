@@ -1,7 +1,7 @@
 # generate_all_figures_final.py
 """
-Genera todas las figuras del paper con error bars
-Lee datos directamente de los CSVs generados
+Generate all figures in the paper with error bars
+Read data directly from the generated CSVs
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,7 +11,7 @@ from pathlib import Path
 from pyparsing import col
 from sympy import N
 
-# Configuración de matplotlib
+# Matplotlib configuration
 plt.rcParams['font.size'] = 12
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['figure.dpi'] = 300
@@ -19,28 +19,28 @@ plt.rcParams['savefig.dpi'] = 300
 plt.rcParams['savefig.bbox'] = 'tight'
 
 # ============================================================
-# DIRECTORIOS
+# FOLDER
 # ============================================================
-base_dir = Path("/Users/fernando/Documents/Doctorado/Udacity_Dataset/paper_5/output")
+base_dir = Path("./output")
 output_dir = base_dir / "figures_final_std"
 output_dir.mkdir(parents=True, exist_ok=True)
 
 # ============================================================
-# CARGAR DATOS DE CSVs
+# LOAD CSV data
 # ============================================================
-print("Cargando datos de CSVs...")
+print("Loading CSVs...")
 
-# Leer datos de Mac M1
+# Reading data from Mac M1
 mac_csv = base_dir / "benchmark_results"/ "mac_statistics_summary.csv"
 akida_csv = base_dir / "benchmark_results_Akida" / "akida_statistics_summary.csv"
 
-# Verificar que existen
+# Check if they exist
 if not mac_csv.exists():
     raise FileNotFoundError(f"No se encuentra: {mac_csv}")
 if not akida_csv.exists():
     raise FileNotFoundError(f"No se encuentra: {akida_csv}")
 
-# Cargar CSVs
+# Load CSVs
 df_mac = pd.read_csv(mac_csv)
 df_akida = pd.read_csv(akida_csv)
 
@@ -48,12 +48,12 @@ print(f"  ✓ Mac M1 data: {len(df_mac)} arquitecturas")
 print(f"  ✓ Akida data: {len(df_akida)} arquitecturas")
 
 # ============================================================
-# ORGANIZAR DATOS POR ARQUITECTURA
+# ORGANIZE DATA BY ARCHITECTURE
 # ============================================================
 architectures = ['pilotnet', 'laksnet', 'mininet']
 arch_labels = ['PilotNet', 'LaksNet', 'MiniNet']
 
-# Crear diccionario de datos
+# Create data dictionary
 data = {}
 
 for arch in architectures:
@@ -62,14 +62,13 @@ for arch in architectures:
     akida_row = df_akida[df_akida['architecture'].str.lower() == arch.lower()]
     
     if mac_row.empty or akida_row.empty:
-        print(f"⚠️  WARNING: No se encontraron datos para {arch}")
+        print(f"   WARNING: No se encontraron datos para {arch}")
         continue
     
     # Extraer valores (primer match)
     mac_row = mac_row.iloc[0]
     akida_row = akida_row.iloc[0]
     
-    # CORRECCIÓN CRÍTICA: Multiplicar energía × 1000 (columna está en Wh, no mWh)
     data[arch] = {
         'mac': {
             'latency_ms': mac_row['mean_latency_ms'],
@@ -94,9 +93,9 @@ for arch in architectures:
         }
     }
 
-print(f"\n✓ Datos organizados para {len(data)} arquitecturas\n")
+print(f"\n  Data organized for {len(data)} architectures\n")
 
-# Mostrar resumen
+# MShow summary
 for arch in architectures:
     if arch in data:
         print(f"{arch.upper()}:")
@@ -105,7 +104,7 @@ for arch in architectures:
         print(f"  Akida: Latency={data[arch]['akida']['latency_ms']:.2f}±{data[arch]['akida']['latency_std']:.2f}ms, "
               f"Energy={data[arch]['akida']['energy_mwh']:.2f}mWh, Power={data[arch]['akida']['power_w']:.2f}W")
         
-        # Calcular reducciones
+        # Calculate reductions
         energy_reduction = data[arch]['mac']['energy_mwh'] / data[arch]['akida']['energy_mwh']
         power_reduction = data[arch]['mac']['power_w'] / data[arch]['akida']['power_w']
         speedup = data[arch]['mac']['latency_ms'] / data[arch]['akida']['latency_ms']
@@ -163,7 +162,7 @@ bars2 = ax.bar(x + width/1.8, akida_energy, width,
                label='RPi5 + Akida 1.0', capsize=5, alpha=0.7, color='#e74c3c',
                edgecolor='black')
 
-# Anotaciones de reducción
+# Reduction annotations
 for i, arch in enumerate(architectures):
     if arch not in data:
         continue
@@ -211,7 +210,7 @@ print(f"  ✓ Guardada: {output_path}")
 # ============================================================
 # FIGURE 2: Latency Comparison (CON ERROR BARS)
 # ============================================================
-print("Generando Figure 2: Latency Comparison...")
+print("Generating Figure 2: Latency Comparison...")
 
 fig, ax = plt.subplots(figsize=(10, 6))
 apply_axis_style(ax, style="minimal")
@@ -277,7 +276,7 @@ print(f"  ✓ Guardada: {output_path}")
 # ============================================================
 # FIGURE 3: Power Consumption Comparison
 # ============================================================
-print("Generando Figure 3: Power Comparison...")
+print("Generating Figure 3: Power Comparison...")
 
 fig, ax = plt.subplots(figsize=(10, 6))
 apply_axis_style(ax, style="minimal")
@@ -340,7 +339,7 @@ print(f"  ✓ Guardada: {output_path}")
 # ============================================================
 # FIGURE 4: Gramms CO2 emission per sample Comparison
 # ============================================================
-print("Generando Figure 4: Gramms CO2 emission per sample Comparison...")
+print("Generating Figure 4: Gramms CO2 emission per sample Comparison...")
 
 fig, ax = plt.subplots(figsize=(10, 6))
 apply_axis_style(ax, style="minimal")
@@ -403,7 +402,7 @@ print(f"  ✓ Guardada: {output_path}")
 # ============================================================
 # FIGURE 5: Energy-Accuracy Trade-off (Scatter)
 # ============================================================
-print("Generando Figure 5: Energy-Accuracy Tradeoff...")
+print("Generating Figure 5: Energy-Accuracy Tradeoff...")
 
 fig, ax = plt.subplots(figsize=(10, 8))
 apply_axis_style(ax, style="minimal")
@@ -450,7 +449,7 @@ print(f"  ✓ Guardada: {output_path}")
 # ============================================================
 # FIGURE 6: Accuracy Degradation Bar Chart
 # ============================================================
-print("Generando Figure 6: Accuracy Degradation...")
+print("Generating Figure 6: Accuracy Degradation...")
 
 fig, ax = plt.subplots(figsize=(10, 6))
 apply_axis_style(ax, style="minimal")
@@ -510,16 +509,16 @@ output_path = output_dir / 'figure_accuracy_degradation.pdf'
 plt.savefig(output_path)
 plt.savefig(output_dir / 'figure_accuracy_degradation.jpg')
 plt.close()
-print(f"  ✓ Guardada: {output_path}")
+print(f"   Guardada: {output_path}")
 
 # ============================================================
-# RESUMEN
+# SUMMARY
 # ============================================================
 print("\n" + "="*70)
-print("✅ TODAS LAS FIGURAS GENERADAS EXITOSAMENTE")
+print(" ALL FIGURES SUCCESSFULLY GENERATED")
 print("="*70)
-print(f"Directorio: {output_dir}")
-print("\nFiguras generadas:")
+print(f"Directory: {output_dir}")
+print("\nFigures generated:")
 print("  1. figure_energy_comparison.pdf/.jpg")
 print("  2. figure_latency_comparison.pdf/.jpg (CON ERROR BARS)")
 print("  3. figure_power_comparison.pdf/.jpg")
