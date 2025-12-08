@@ -10,9 +10,9 @@ Dependencies:
 
 Usage:
 python unified_benchmark_akida.py \
-    --akida_model  /home/fernando/Documents/Doctorado/akida_models/pilotnet_akida/pilotnet_best_q4_akida.fbz \
-    --data_dir  /home/fernando/Documents/Doctorado/Original_Images \
-    --output_dir /home/fernando/Documents/Doctorado/akida_models/benchmark_results \
+    --akida_model ./akida_models/pilotnet_akida/pilotnet_best_q4_akida.fbz \
+    --data_dir ./Original_Images \
+    --output_dir ./akida_models/benchmark_results \
     --num_samples 1000 \
     --tc66_port /dev/ttyACM0 \
     --measure_idle
@@ -69,7 +69,7 @@ class TC66CRecorder:
     def connect(self):
         """Connect to TC66"""
         if not TC66C_AVAILABLE:
-            print("❌ TC66C library not available")
+            print("TC66C library not available")
             return False
 
         try:
@@ -80,7 +80,7 @@ class TC66CRecorder:
             print(f"  Current: {dev.Volt:.3f}V, {dev.Current * 1000:.1f}mA, {dev.Power:.3f}W")
             return True
         except Exception as e:
-            print(f"❌ Failed to connect TC66: {e}")
+            print(f"Failed to connect TC66: {e}")
             return False
 
     def _measurement_loop(self):
@@ -100,7 +100,7 @@ class TC66CRecorder:
                 })
                 time.sleep(self.poll_interval)
             except Exception as e:
-                print(f"⚠️ TC66 poll error: {e}")
+                print(f"TC66 poll error: {e}")
                 break
 
     def start(self):
@@ -112,7 +112,7 @@ class TC66CRecorder:
         self.recording = True
         self.thread = threading.Thread(target=self._measurement_loop, daemon=True)
         self.thread.start()
-        print(f"🔌 TC66 recording started ({int(self.poll_interval * 1000)}ms)")
+        print(f" TC66 recording started ({int(self.poll_interval * 1000)}ms)")
 
     def stop(self):
         """Stop recording and return measurements"""
@@ -121,7 +121,7 @@ class TC66CRecorder:
             self.thread.join(timeout=2.0)
 
         meas = list(self.measurements)
-        print(f"🔌 TC66 recording stopped ({len(meas)} samples)")
+        print(f" TC66 recording stopped ({len(meas)} samples)")
         return meas
 
     @staticmethod
@@ -179,7 +179,7 @@ def measure_idle_power_tc66(tc66_port, duration_seconds=10):
 
     recorder = TC66CRecorder(tc66_port, poll_interval=0.1)
     if not recorder.connect():
-        print("❌ Could not connect to TC66")
+        print("Could not connect to TC66")
         return {'idle_power_w': 0.0}
 
     time.sleep(0.5)
@@ -188,13 +188,13 @@ def measure_idle_power_tc66(tc66_port, duration_seconds=10):
     measurements = recorder.stop()
 
     if not measurements:
-        print("❌ No measurements collected")
+        print("No measurements collected")
         return {'idle_power_w': 0.0}
 
     summary = TC66CRecorder.summarize(measurements)
     idle_power_w = summary['avg_power_w']
 
-    print(f"\n✓ Idle measurement complete")
+    print(f"\nIdle measurement complete")
     print(f"  Samples:     {len(measurements)}")
     print(f"  Idle power:  {idle_power_w:.2f} W")
     print(f"  Range:       {summary['min_power_w']:.2f} - {summary['max_power_w']:.2f} W")
@@ -249,7 +249,7 @@ def load_validation_data(data_dir, num_samples=1000):
 
     steerings = np.array(steerings, dtype=np.float32)
 
-    print(f"\n✓ Loaded {len(img_paths)} validation samples")
+    print(f"\nLoaded {len(img_paths)} validation samples")
     print(f"  Steering range: [{steerings.min():.3f}, {steerings.max():.3f}]")
 
     return img_paths, steerings
@@ -292,7 +292,7 @@ def detect_akida_device():
     devices = akida.devices()
 
     if len(devices) == 0:
-        print("❌ NO AKIDA DEVICE DETECTED!")
+        print("NO AKIDA DEVICE DETECTED!")
         print("Inference will run in CPU emulation (VERY SLOW)")
         return None
 
@@ -317,7 +317,7 @@ def load_akida_model(model_path, device):
 
     try:
         model = Model(str(model_path))
-        print(f"✓ Model loaded")
+        print(f"Model loaded")
         print(f"  Input:  {model.input_shape}")
         print(f"  Output: {model.output_shape}")
         print(f"  Layers: {len(model.layers)}")
@@ -330,15 +330,15 @@ def load_akida_model(model_path, device):
                 print("✓ Model mapped to Akida NPU")
                 mapping_success = True
             except RuntimeError as e:
-                print(f"❌ Mapping failed: {e}")
+                print(f"Mapping failed: {e}")
                 print("Model will run in CPU emulation")
         else:
-            print("\n⚠️ No device detected, running in CPU emulation")
+            print("\nNo device detected, running in CPU emulation")
 
         return model, mapping_success
 
     except Exception as e:
-        print(f"❌ Failed to load model: {e}")
+        print(f"Failed to load model: {e}")
         sys.exit(1)
 
 
@@ -495,7 +495,7 @@ def benchmark_inference_unified(model, images, steerings, warmup_runs=10,
         print(f"  Per sample:      {co2_g_per_sample:.6f} gCO2")
         print(f"  Emission factor: {emission_factor:.3f} kgCO2/kWh ({country_code})")
     else:
-        print(f"\n⚠️ No TC66 measurements available")
+        print(f"\nNo TC66 measurements available")
 
     print('=' * 70)
 
@@ -596,7 +596,7 @@ def main():
 
     model_path = Path(args.akida_model)
     if not model_path.exists():
-        print(f"❌ Model not found: {model_path}")
+        print(f"Model not found: {model_path}")
         return
 
     print(f"\n{'=' * 70}")
